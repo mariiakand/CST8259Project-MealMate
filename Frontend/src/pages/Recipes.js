@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Plus } from 'lucide-react';
 import RecipeCard from '../components/RecipeCard';
 import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -10,6 +11,8 @@ const Recipes = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [sortBy, setSortBy] = useState('latest');
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchRecipes();
@@ -109,6 +112,24 @@ const Recipes = () => {
                 <option value="time">Quickest</option>
               </select>
             </div>
+
+            <div 
+      style={{ 
+        display: 'flex', 
+        justifyContent: 'flex-end', 
+        marginBottom: '8px' 
+      }}
+    >
+      {/* add a recipe */}
+      <button
+        onClick={() => navigate('/create-recipe')}
+        className="btn btn-primary"
+        style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+        aria-label="Create new recipe"
+      >
+        <Plus size={20} />
+      </button>
+    </div>
           </div>
         </div>
 
