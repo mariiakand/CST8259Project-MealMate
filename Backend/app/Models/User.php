@@ -60,9 +60,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(MealPlan::class);
     }
-
-    public function ratings()
-    {
-        return $this->hasMany(Rating::class);
-    }
 }
