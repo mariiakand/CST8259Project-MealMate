@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Plus, Edit, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const MealPlans = () => {
     const [mealPlans, setMealPlans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         fetchMealPlans();
@@ -48,14 +51,16 @@ const MealPlans = () => {
                 </div>
 
                 <div className="meal-plans-actions">
-                    <button
-                        onClick={() => setShowCreateForm(true)}
-                        className="btn btn-primary"
-                    >
-                        <Plus size={20} />
-                        Create New Meal Plan
-                    </button>
+                <button
+                    onClick={() => navigate('/create-meal-plan')}
+                    className="btn btn-primary"
+                >
+                    <Plus size={20} />
+                    Create New Meal Plan
+                </button>
+
                 </div>
+
 
                 {mealPlans.length > 0 ? (
                     <div className="meal-plans-list">
@@ -95,13 +100,13 @@ const MealPlans = () => {
                         <Calendar size={64} />
                         <h2>No meal plans yet</h2>
                         <p>Create your first meal plan to get organized!</p>
-                        <button
+                        {/* <button
                             onClick={() => setShowCreateForm(true)}
                             className="btn btn-primary"
                         >
                             <Plus size={20} />
                             Create Meal Plan
-                        </button>
+                        </button>*/}
                     </div>
                 )}
             </div>
