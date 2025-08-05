@@ -15,13 +15,14 @@ Route::post('/login', [AuthController::class, 'login']);
 //public recipe routes
 Route::get('/recipes', [RecipeController::class, 'index']);
 Route::get('/recipes/{recipe}', [RecipeController::class, 'show']);
-Route::get('/ingredients', [IngredientController::class, 'index']);
+// Route::get('/ingredients', [IngredientController::class, 'index']);
 
 // protected routes
 Route::middleware('auth:sanctum')->group(function () {
     //auth routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::middleware('auth:sanctum')->get('/favorites', [RecipeController::class, 'favorites']);
     
     //recipe routes
     Route::post('/recipes', [RecipeController::class, 'store']);

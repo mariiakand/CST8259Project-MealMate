@@ -14,7 +14,7 @@ class RecipeController extends Controller
     //get all recipes with user, ingredients, and favorite count
     public function index()
     {
-        $recipes = Recipe::with(['user', 'ingredients'])
+        $recipes = Recipe::with(['user', 'ingredients', 'favoritedBy'])
                         ->withCount('favoritedBy')
                         ->latest()
                         ->get();
@@ -118,5 +118,19 @@ class RecipeController extends Controller
         }
 
 
-        //ADD FAVOURITES
-}
+        public function favorite(Recipe $recipe)
+        {
+            $user = auth::user();
+            
+            if ($user->favorites()->where('recipe_id', $recipe->id)->exists()) {
+                $user->favorites()->detach($recipe->id);
+                $favorited = false;
+            } else {
+                $user->favorites()->attach($recipe->id);
+                $favorited = true;
+            }
+    
+            return response()->json(['favorited' => $favorited]);
+        }
+    
+        }
