@@ -3,6 +3,10 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\IngredientController;
 use Illuminate\Support\Facades\Route;
 
+//public routes
+Route::post('/register', [AuthController::class, 'register']); 
+Route::post('/login', [AuthController::class, 'login']);
+
 //public recipe routes
 Route::get('/recipes', [RecipeController::class, 'index']);
 Route::get('/recipes/{recipe}', [RecipeController::class, 'show']);
