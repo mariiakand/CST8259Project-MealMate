@@ -8,6 +8,10 @@ use App\Http\Controllers\MealPlanController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+//public routes
+Route::post('/register', [AuthController::class, 'register']); 
+Route::post('/login', [AuthController::class, 'login']);
+
 //public recipe routes
 Route::get('/recipes', [RecipeController::class, 'index']);
 Route::get('/recipes/{recipe}', [RecipeController::class, 'show']);
