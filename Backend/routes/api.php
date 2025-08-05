@@ -2,6 +2,11 @@
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\IngredientController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MealPlanController;
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
 //public recipe routes
 Route::get('/recipes', [RecipeController::class, 'index']);
