@@ -111,8 +111,10 @@ class RecipeController extends Controller
     //delete a recipe
     public function destroy(Recipe $recipe)
     {
-        $this->authorize('delete', $recipe);
-        $recipe->delete();
+        if ($recipe->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+                $recipe->delete();
 
         return response()->json(null, 204);
         }
