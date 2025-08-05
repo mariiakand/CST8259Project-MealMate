@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Import your API service
-import { CalendarPlus } from 'lucide-react'; // For an icon, if you use lucide-react
+import api from '../services/api';
+import { CalendarPlus } from 'lucide-react';
 
 const CreateMealPlan = () => {
     const navigate = useNavigate();
@@ -9,10 +9,26 @@ const CreateMealPlan = () => {
         name: '',
         start_date: '',
         end_date: '',
-        meals: [], // This will be an array of meal objects
+        meals: [],
     });
+
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [recipes, setRecipes] = useState([]);
+
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            try {
+                const response = await api.get('/recipes');
+                setRecipes(response.data);
+            } catch (err) {
+                console.error('Failed to load recipes:', err);
+                setError('Failed to load recipes.');
+            }
+        };
+
+        fetchRecipes();
+    }, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +43,7 @@ const CreateMealPlan = () => {
     const addMealField = () => {
         setFormData({
             ...formData,
-            meals: [...formData.meals, { day: '', type: '', recipe_id: '' }], // Add more fields as per your 'meals' JSON structure in MealPlan model
+            meals: [...formData.meals, { day: '', type: '', recipe_id: '' }],
         });
     };
 
@@ -47,12 +63,10 @@ const CreateMealPlan = () => {
                 ...formData,
                 start_date: formData.start_date, // Assuming input type="date" gives correct format
                 end_date: formData.end_date,
-                // You might need to refine 'meals' structure based on your backend expectation
-                // For simplicity, we'll send it as is. Backend expects a JSON array.
             };
 
-            await api.post('/meal-plans', payload); // API call to your Laravel backend
-            navigate('/meal-plans'); // Redirect to meal plans list after creation
+            await api.post('/meal-plans', payload);
+            navigate('/meal-plans');
         } catch (err) {
             console.error('Error creating meal plan:', err);
             setError(err.response?.data?.message || 'Failed to create meal plan.');
@@ -114,7 +128,7 @@ const CreateMealPlan = () => {
                     </div>
 
                     <h3>Meals for the Plan:</h3>
-                    {/* This section needs refinement based on how you want to structure meals (e.g., by day, by meal type) */}
+
                     {formData.meals.map((meal, index) => (
                         <div key={index} className="meal-input-group">
                             <input
@@ -131,18 +145,29 @@ const CreateMealPlan = () => {
                                 onChange={(e) => handleMealChange(index, 'type', e.target.value)}
                                 className="form-input"
                             />
-                            <input
-                                type="number"
-                                placeholder="Recipe ID"
+                            <select
                                 value={meal.recipe_id}
                                 onChange={(e) => handleMealChange(index, 'recipe_id', e.target.value)}
                                 className="form-input"
-                            />
-                            <button type="button" onClick={() => removeMealField(index)} className="btn btn-danger btn-small">
+                                required
+                            >
+                                <option value="">Select Recipe</option>
+                                {recipes.map((recipe) => (
+                                    <option key={recipe.id} value={recipe.id}>
+                                        {recipe.title}
+                                    </option>
+                                ))}
+                            </select>
+                            <button
+                                type="button"
+                                onClick={() => removeMealField(index)}
+                                className="btn btn-danger btn-small"
+                            >
                                 Remove
                             </button>
                         </div>
                     ))}
+
                     <button type="button" onClick={addMealField} className="btn btn-secondary">
                         Add Meal
                     </button>
