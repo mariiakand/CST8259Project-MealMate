@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Clock, Users, Star } from 'lucide-react';
+import { Heart, Clock, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 
@@ -51,10 +51,6 @@ const RecipeCard = ({ recipe, onFavoriteChange }) => {
             <div className="meta-item">
               <Users size={16} />
               <span>{recipe.servings} servings</span>
-            </div>
-            <div className="meta-item">
-              <Star size={16} />
-              <span>{recipe.average_rating?.toFixed(1) || '0.0'}</span>
             </div>
           </div>
           

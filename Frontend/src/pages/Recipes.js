@@ -44,8 +44,6 @@ const Recipes = () => {
       switch (sortBy) {
         case 'latest':
           return new Date(b.created_at) - new Date(a.created_at);
-        case 'rating':
-          return (b.average_rating || 0) - (a.average_rating || 0);
         case 'time':
           return (a.prep_time + a.cook_time) - (b.prep_time + b.cook_time);
         default:
@@ -108,7 +106,6 @@ const Recipes = () => {
                 className="filter-select"
               >
                 <option value="latest">Latest</option>
-                <option value="rating">Highest Rated</option>
                 <option value="time">Quickest</option>
               </select>
             </div>

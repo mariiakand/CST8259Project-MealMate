@@ -20,9 +20,6 @@ const RecipeDetail = () => {
     const [recipe, setRecipe] = useState(null);
     const [loading, setLoading] = useState(true);
     const [favorited, setFavorited] = useState(false);
-    const [userRating, setUserRating] = useState(0);
-    const [comment, setComment] = useState('');
-    const [submittingRating, setSubmittingRating] = useState(false);
 
     useEffect(() => {
         fetchRecipe();
@@ -38,15 +35,6 @@ const RecipeDetail = () => {
                 setFavorited(
                     response.data.favorited_by?.some(fav => fav.id === user.id) || false
                 );
-
-                // Get user's existing rating
-                const existingRating = response.data.ratings?.find(
-                    rating => rating.user_id === user.id
-                );
-                if (existingRating) {
-                    setUserRating(existingRating.rating);
-                    setComment(existingRating.comment || '');
-                }
             }
         } catch (error) {
             console.error('Error fetching recipe:', error);
@@ -64,26 +52,6 @@ const RecipeDetail = () => {
             setFavorited(response.data.favorited);
         } catch (error) {
             console.error('Error toggling favorite:', error);
-        }
-    };
-
-    const handleRating = async (rating) => {
-        if (!user) return;
-
-        setSubmittingRating(true);
-        try {
-            await api.post(`/recipes/${id}/rate`, {
-                rating,
-                comment: comment.trim() || null,
-            });
-
-            setUserRating(rating);
-            // Refresh recipe to get updated ratings
-            fetchRecipe();
-        } catch (error) {
-            console.error('Error submitting rating:', error);
-        } finally {
-            setSubmittingRating(false);
         }
     };
 
@@ -179,17 +147,6 @@ const RecipeDetail = () => {
                             </div>
 
                             <div className="meta-item">
-                                <Star size={20} />
-                                <div>
-                                    <span className="meta-label">Rating</span>
-                                    <span className="meta-value">
-                                        {recipe.average_rating?.toFixed(1) || '0.0'}
-                                        ({recipe.total_ratings} reviews)
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="meta-item">
                                 <span className={`difficulty-badge ${recipe.difficulty}`}>
                                     {recipe.difficulty}
                                 </span>
@@ -226,73 +183,6 @@ const RecipeDetail = () => {
                                     <p key={index} className="instruction-step">
                                         {step}
                                     </p>
-                                ))}
-                            </div>
-                        </section>
-                    </div>
-
-                    <div className="recipe-sidebar">
-                        {user && (
-                            <section className="rating-section">
-                                <h3>Rate This Recipe</h3>
-                                <div className="star-rating">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            onClick={() => handleRating(star)}
-                                            disabled={submittingRating}
-                                            className={`star-btn ${star <= userRating ? 'active' : ''}`}
-                                        >
-                                            <Star size={24} fill={star <= userRating ? 'currentColor' : 'none'} />
-                                        </button>
-                                    ))}
-                                </div>
-
-                                <textarea
-                                    placeholder="Leave a comment (optional)"
-                                    value={comment}
-                                    onChange={(e) => setComment(e.target.value)}
-                                    className="comment-input"
-                                    rows="3"
-                                />
-
-                                {userRating > 0 && (
-                                    <button
-                                        onClick={() => handleRating(userRating)}
-                                        disabled={submittingRating}
-                                        className="btn btn-primary btn-sm"
-                                    >
-                                        {submittingRating ? 'Submitting...' : 'Submit Rating'}
-                                    </button>
-                                )}
-                            </section>
-                        )}
-
-                        <section className="reviews-section">
-                            <h3>Reviews ({recipe.ratings?.length || 0})</h3>
-                            <div className="reviews-list">
-                                {recipe.ratings?.map((rating) => (
-                                    <div key={rating.id} className="review-item">
-                                        <div className="review-header">
-                                            <span className="reviewer-name">{rating.user?.name}</span>
-                                            <div className="review-stars">
-                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                    <Star
-                                                        key={star}
-                                                        size={14}
-                                                        fill={star <= rating.rating ? '#ffc107' : 'none'}
-                                                        color="#ffc107"
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-                                        {rating.comment && (
-                                            <p className="review-comment">{rating.comment}</p>
-                                        )}
-                                        <span className="review-date">
-                                            {new Date(rating.created_at).toLocaleDateString()}
-                                        </span>
-                                    </div>
                                 ))}
                             </div>
                         </section>
