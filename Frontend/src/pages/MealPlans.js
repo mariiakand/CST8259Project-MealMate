@@ -75,7 +75,8 @@ const MealPlans = () => {
                                         </p>
                                     </div>
                                     <div className="meal-plan-actions">
-                                        <button className="btn btn-secondary btn-sm">
+                                        <button className="btn btn-secondary btn-sm"
+                                            onClick={() => navigate(`/meal-plans/${plan.id}/edit`)}>
                                             <Edit size={16} />
                                             Edit
                                         </button>

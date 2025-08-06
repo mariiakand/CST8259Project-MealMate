@@ -71,7 +71,9 @@ class RecipeController extends Controller
     //update a recipe
     public function update(Request $request, Recipe $recipe)
     {
-        $this->authorize('update', $recipe);
+        if ($recipe->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
 
         $validated = $request->validate([
             'title' => ['sometimes', 'string', 'max:255'],

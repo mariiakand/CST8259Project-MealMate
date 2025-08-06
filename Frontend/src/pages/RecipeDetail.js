@@ -81,10 +81,10 @@ const RecipeDetail = () => {
     return (
         <div className="recipe-detail">
             <div className="container">
-                <button onClick={() => navigate(-1)} className="back-btn">
-                    <ArrowLeft size={20} />
-                    Back to Recipes
-                </button>
+            <button onClick={() => navigate('/recipes')} className="back-btn">
+                <ArrowLeft size={20} />
+                Back to Recipes
+            </button>
 
                 <div className="recipe-header">
                     {recipe.image_url && (
@@ -110,7 +110,8 @@ const RecipeDetail = () => {
                             <h1>{recipe.title}</h1>
                             {isOwner && (
                                 <div className="recipe-actions">
-                                    <button className="btn btn-secondary btn-sm">
+                                    <button className="btn btn-secondary btn-sm"
+                                        onClick={() => navigate(`/recipes/${recipe.id}/edit`)}>
                                         <Edit size={16} />
                                         Edit
                                     </button>

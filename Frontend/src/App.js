@@ -13,6 +13,8 @@ import Favorites from './pages/Favorites';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 import CreateMealPlan from './pages/CreateMealPlan';
+import EditRecipe from './pages/EditRecipe';
+import EditMealPlan from './pages/EditMealPlan';
 
 function App() {
   return (
@@ -34,6 +36,18 @@ function App() {
                     <CreateRecipe />
                   </ProtectedRoute>
                 } 
+              />
+              <Route 
+                path="/recipes/:id/edit" 
+                element={
+                  <EditRecipe />
+                } 
+              />
+              <Route
+                path="/meal-plans/:id/edit"
+                element={
+                  <EditMealPlan />
+                }
               />
               <Route 
                 path="/meal-plans" 
