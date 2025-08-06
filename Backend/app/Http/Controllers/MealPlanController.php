@@ -40,8 +40,6 @@ class MealPlanController extends Controller
 
     public function update(Request $request, MealPlan $mealPlan)
     {
-        $this->authorize('update', $mealPlan);
-
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'start_date' => ['sometimes', 'date'],
