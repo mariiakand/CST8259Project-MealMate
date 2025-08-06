@@ -18,6 +18,10 @@ const EditMealPlan = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    const formatDate = (dateString) => {
+        return new Date(dateString).toISOString().split('T')[0];
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -26,8 +30,8 @@ const EditMealPlan = () => {
 
                 setFormData({
                     name: mealPlanRes.data.name,
-                    start_date: mealPlanRes.data.start_date,
-                    end_date: mealPlanRes.data.end_date,
+                    start_date: formatDate(mealPlanRes.data.start_date),
+                    end_date: formatDate(mealPlanRes.data.end_date),
                     meals: mealPlanRes.data.meals.map((meal) => ({
                         day: meal.day,
                         type: meal.type,

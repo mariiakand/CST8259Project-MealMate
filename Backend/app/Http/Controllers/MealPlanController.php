@@ -35,8 +35,6 @@ class MealPlanController extends Controller
 
     public function show(MealPlan $mealPlan)
     {
-        $this->authorize('view', $mealPlan);
-        
         return response()->json($mealPlan);
     }
 

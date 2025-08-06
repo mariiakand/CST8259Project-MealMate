@@ -90,8 +90,18 @@ const MealPlans = () => {
                                     </div>
                                 </div>
 
-                                <div className="meal-plan-content">
-                                    <p>Meal plan details would be displayed here...</p>
+                                <div className="meal-plan-content">                             
+                                    {plan.meals && plan.meals.length > 0 ? (
+                                        <ul className="meal-list">
+                                            {plan.meals.map((meal, index) => (
+                                                <li key={index}>
+                                                    <strong>{meal.day}</strong> – {meal.type}: Recipe #{meal.recipe_id}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>No meals added yet.</p>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -101,13 +111,6 @@ const MealPlans = () => {
                         <Calendar size={64} />
                         <h2>No meal plans yet</h2>
                         <p>Create your first meal plan to get organized!</p>
-                        {/* <button
-                            onClick={() => setShowCreateForm(true)}
-                            className="btn btn-primary"
-                        >
-                            <Plus size={20} />
-                            Create Meal Plan
-                        </button>*/}
                     </div>
                 )}
             </div>
